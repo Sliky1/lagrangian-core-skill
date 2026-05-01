@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to lagrangian-core-skill are documented here.
+All notable changes to lagrangian-skills are documented here.
 
 ## [v0.9.3] — 2026-05-01
 
@@ -9,8 +9,11 @@ All notable changes to lagrangian-core-skill are documented here.
   - Layer B (pre-detection): `ensemble_vote`, `quarantine=5`, `safe_direction` fallback
   - Layer A (projection): `adaptive_trust_region`, `proj_radius=0.10`, `restart_thresh=5`
   - Confirmed by ablation: 60 configs × 2000 simulations per scheme
+- `archive/` milestone snapshots: v0.1.0, v0.3.0, v0.5.0, v0.7.0, v0.8.0, v0.9.3
 
 ### Changed
+- Repository renamed from `lagrangian-core-skill` → `lagrangian-skills`
+- Skill directory renamed from `lagrangian-core/` → `lagrangian/`
 - Language optimization: technical identifiers 100% English, behavioral rules Chinese
 - Removed explanatory Chinese comments from solver routing table (no execution value)
 - Compressed FIX-22 block annotations; doc reduced from 4,021 → 3,920 chars
