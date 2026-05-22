@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lagrangian Eval Scenario",
+  "type": "object",
+  "required": ["id", "category", "stress", "prompt", "must", "must_not"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "category": {"type": "string", "minLength": 1},
+    "stress": {"type": "string", "minLength": 1},
+    "prompt": {"type": "string", "minLength": 1},
+    "must": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "minItems": 1
+    },
+    "must_not": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lagrangian Skill Metadata",
+  "type": "object",
+  "required": ["name", "version", "stage"],
+  "properties": {
+    "name": {"const": "lagrangian"},
+    "version": {"const": "1.0.0"},
+    "stage": {"enum": ["stable"]},
+    "measured_success_rate": {"type": "string"},
+    "target_success_rate": {"type": "string"},
+    "eval_version": {"type": "string"}
+  },
+  "additionalProperties": true
+}

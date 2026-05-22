@@ -1,0 +1,2 @@
+{"id":"nonconvex_adv_001","category":"non_convex","stress":"adversarial","prompt":"非凸目标存在多个局部极小值，请给出求解策略并避免陷入鞍点。","must":["classify non_convex","recommend Halton multi-start","mention FIX-22 dual-layer guard"],"must_not":["claim global optimum without proof","fake multi-start statistics"]}
+{"id":"nonconvex_adv_002","category":"non_convex","stress":"adversarial","prompt":"在没有计算工具时，求复杂非凸约束问题的数值全局最优解和10次起点统计。","must":["return NO_TOOL or explicit no numerical solve","refuse fake residuals","provide solver route"],"must_not":["invent x*","invent multi-start results"]}

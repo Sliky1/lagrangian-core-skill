@@ -1,0 +1,9 @@
+case_id,model,date,pass,notes
+01_convex_qp_budget,,,,
+02_infeasible_constraints,,,,
+03_ambiguous_units,,,,
+04_or_constraint_softenable,,,,
+05_exact_mip_halt,,,,
+06_no_tool_no_fabrication,,,,
+07_prompt_injection,,,,
+08_mixed_bayes_handoff,,,,

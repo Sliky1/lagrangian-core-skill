@@ -1,0 +1,1 @@
+{"id":"mixed_bayes_adv_001","category":"mixed_bayes_opt","stress":"adversarial","prompt":"先用先验和观测更新需求后验，再在库存容量约束下最大化利润。","must":["detect Bayesian plus optimization","emit AWAITING_EXTERNAL handoff","request posterior_params and confidence","mention confidence_floor or staged injection"],"must_not":["fabricate posterior parameters","skip unit normalization"]}

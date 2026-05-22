@@ -1,25 +1,38 @@
 # lagrangian-skills
 
-An opinionated [Agent Skill](https://agentskills.io/specification) for constrained optimization using Augmented Lagrangian Methods (ALM), ADMM, and KKT-based verification. Compatible with Claude Code, Cursor, Gemini CLI, and any agent that supports the Agent Skills spec.
+
+## v1.0.0 Complete Release Standard
+
+This package is a complete v1.0.0 release. Completeness is defined by the presence of the core skill, reference docs, golden tests, eval scenarios, schemas, release notes, security policy, contribution policy, and a passing release validator.
+
+Run:
+
+```bash
+python scripts/check_release.py
+python evals/run_eval.py
+```
+
+Expected result: both commands pass with exit code 0.
+
+A stable Agent Skill for constrained optimization using Augmented Lagrangian Methods (ALM), ADMM, KKT-style verification, infeasibility diagnosis, and capability-aware no-tool fallback. It is designed for agents that need to reason about budgets, capacities, safety limits, equality/inequality constraints, multi-objective trade-offs, and softenable logic constraints.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-v0.9.4-blue.svg)](lagrangian/SKILL.md)
-[![Success Rate](https://img.shields.io/badge/success%20rate-96.78%25-brightgreen.svg)](evals/)
-[![Releases](https://img.shields.io/github/v/release/Sliky1/lagrangian-skills)](https://github.com/Sliky1/lagrangian-skills/releases)
+[![Version](https://img.shields.io/badge/version-v1.0.0-blue.svg)](lagrangian/SKILL.md)
+[![Measured Success Rate](https://img.shields.io/badge/measured%20success-96.78%25-brightgreen.svg)](evals/)
+[![Target](https://img.shields.io/badge/target-98.5%25-lightgrey.svg)](evals/)
 
 ## What this skill does
 
-Most agents, when handed a constrained optimization problem, will attempt a solution without checking KKT conditions, verifying feasibility, or routing to the right solver. This skill enforces a specific sequence of steps and guardrails that produce reliable, verifiable results.
+Most agents can describe Lagrange multipliers, but often fail to normalize the model, verify feasibility, route the problem type correctly, or admit when a numerical solver is unavailable. This skill enforces a guarded workflow:
 
-Key behaviors the agent won't do unprompted — but this skill enforces:
-
-- Pre-flight feasibility check (LP relaxation) before any computation
-- KKT condition verification with fingerprint caching (~85% hit rate)
-- Halton quasi-random multi-start for non-convex problems (FIX-21)
-- Dual-layer adversarial protection for saddle point traps (FIX-22)
-- Cross-skill handoff for Bayesian-optimization hybrid problems (COOP)
-- Structured failure output with minimum slack recovery suggestions
-- Token-efficient output modes: MINIMAL / STANDARD / VERBOSE
+- model normalization before solver routing;
+- feasibility, units, and mixed-problem prechecks;
+- ALM/ADMM/KKT-style route selection;
+- explicit no-fabrication rules for no-tool environments;
+- structured failure outputs and recovery suggestions;
+- cross-skill handoff for Bayesian-optimization hybrids;
+- regression guards for known failure modes;
+- security guards against task text that attempts to disable verification.
 
 ## Quick install
 
@@ -38,62 +51,71 @@ git clone https://github.com/Sliky1/lagrangian-skills.git /tmp/lagrangian-skills
 cp -r /tmp/lagrangian-skills/lagrangian/ ~/.config/agents/skills/lagrangian/
 ```
 
-## Skill
+## Directory structure
 
-| Skill | Description |
-|---|---|
-| [lagrangian](lagrangian/) | Constrained optimization via ALM/ADMM/KKT. Handles convex QP, smooth NLP, non-convex NLP, distributed ADMM, Safe RL, and multi-objective problems. |
+```text
+lagrangian-skills/
+  lagrangian/
+    SKILL.md
+    references/
+      solver-routing.md
+      fix-catalog.md
+      output-templates.md
+      failure-codes.md
+      domain-patterns.md
+      examples.md
+  tests/golden/
+  evals/
+    scenarios/
+    results/
+    ablation/
+    run_eval.py
+```
 
 ## Supported problem types
 
-| Problem type | Solver | Notes |
+| Problem type | Behavior | Boundary |
 |---|---|---|
-| Convex QP / Smooth NLP | `standard_solver` | Baseline; KKT verified |
-| Non-convex NLP | `ALM` (n_starts=10, Halton) | FIX-21v2 + FIX-22 dual-layer guard |
-| Distributed | `ADMM` | Multi-agent consensus |
-| Safe RL | ALM + gradient cosine guard | FIX-16 |
-| Multi-objective | ALM + Pareto repair | FIX-17 |
-| Bayesian-optimization hybrid | Cross-skill COOP | COOP-1/2/3 |
-| Natural language / degenerate | ALM + Tikhonov regularization | FIX-19 |
+| Convex QP / linear allocation | Standard solver or analytic KKT | Global optimum only if solved/proven |
+| Smooth NLP | SQP/IPM/ALM route | Usually local optimum unless convexity proven |
+| Non-convex NLP | ALM + Halton multi-start + FIX-22 guard | No global claim without proof |
+| Distributed optimization | ADMM route | Residuals only if computed |
+| Safe RL constraints | ALM / constrained policy route | FIX-16 and FIX-18 for pressure cases |
+| Multi-objective | Weighted sum, epsilon constraint, Pareto repair | Preference required for a single final answer |
+| Bayesian-optimization hybrid | COOP handoff | Posterior parameters are not fabricated |
+| OR / conditional constraints | Smooth approximation or case split | Exact integer/MIP solution is out of scope |
 
-## Latest release
+## v1.0.0 release highlights
 
-**[v0.9.4](https://github.com/Sliky1/lagrangian-skills/releases/tag/v0.9.4)** — 2026-05-07
-
-- Added `when_to_use` with natural-language trigger examples
-- Added `model: inherit` and `effort: high` frontmatter fields
-- `name` corrected to `lagrangian`; `description` restructured
-
-Full release history → [Releases](https://github.com/Sliky1/lagrangian-skills/releases) · [CHANGELOG](CHANGELOG.md)
+- Promoted the package to a stable v1.0.0 structure.
+- Kept `SKILL.md` as the executable core and moved detailed material to `references/`.
+- Added output templates, failure-code definitions, solver routing, domain-pattern translation, and examples.
+- Added `tests/golden/` behavioral regression cases.
+- Added `evals/scenarios/`, `evals/results/`, `evals/ablation/`, and `evals/run_eval.py` scaffolding.
+- Preserved the measured public benchmark figure as inherited from v0.9.3 rather than inventing a new v1.0 benchmark.
+- Strengthened no-tool and security wording: no fake optima, residuals, multipliers, cache hits, posterior parameters, or multi-start results.
 
 ## Evals
 
+The included measured result remains the latest public benchmark summary from the v0.9.3 logic benchmark. v1.0.0 adds reproducibility scaffolding and regression tests, but does not claim a new measured result until a fresh model run is recorded in `evals/results/`.
+
 | Scenario | With skill | Without skill |
-|---|---|---|
+|---|---:|---:|
 | convex_qp + normal | 99.8% | ~91% |
-| non_convex + adversarial | **96.8%** | ~71% |
+| non_convex + adversarial | 96.8% | ~71% |
 | safe_rl + near_infeasible | 99.1% | ~68% |
 | mixed_bayes + adversarial | 96.0% | ~60% |
 | natural_lang + degenerate | 95.2% | ~55% |
 
-Full eval details → [evals/](evals/)
+Run the scenario structure checker:
+
+```bash
+python evals/run_eval.py
+```
 
 ## Why the skill is written in mixed Chinese and English
 
-The skill uses **Chinese for behavioral rules** and **English for technical identifiers**. This is a deliberate design choice, not an accident:
-
-| Content type | Language | Reason |
-|---|---|---|
-| Algorithm names, parameter names, JSON keys | **English** | The model's training corpus for optimization algorithms is almost entirely English — using English identifiers directly activates the relevant knowledge with higher attention weight |
-| JSON / code blocks | **English** | Format specification is English |
-| Behavioral rules, Forbidden Behaviors, guardrails | **Chinese** | Chinese's topic-prominent structure allows expressing constraints without grammatical subjects, reducing token count by ~20–30% while eliminating subordinate clause ambiguity |
-| Numeric parameters (`thresh=0.010`) | **English** | Universal format |
-
-## Philosophy
-
-This skill is **workflow-first and guardrail-heavy**. It doesn't just remind the agent that ALM exists — it enforces step ordering, input validation, solver routing, and output structure that agents skip when left to their own judgment.
-
-Each FIX is a documented regression addressed by ablation experiment, not a heuristic tweak. All parameter choices (`Halton thresh=0.010`, `proj_radius=0.10`, `cos_thresh=0.10`) are backed by simulation data in [evals/ablation/](evals/ablation/).
+The skill uses Chinese for compact behavioral constraints and English for technical identifiers, JSON keys, algorithm names, and parameter names. This keeps the execution rules compact while preserving alignment with optimization terminology.
 
 ## License
 

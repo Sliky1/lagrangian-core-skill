@@ -1,0 +1,7 @@
+scenario,with_skill,without_skill,notes
+convex_qp_normal,0.998,0.91,public summary
+non_convex_adversarial,0.9682,0.71,public summary after FIX-22
+safe_rl_near_infeasible,0.991,0.68,public summary
+mixed_bayes_adversarial,0.960,0.60,public summary
+natural_lang_degenerate,0.952,0.55,public summary
+aggregate,0.9678,,reported measured success rate

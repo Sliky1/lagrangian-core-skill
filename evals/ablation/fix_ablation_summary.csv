@@ -1,0 +1,5 @@
+fix,scenario,baseline,with_fix,delta_pp,status
+FIX-19,natural_lang_degenerate,0.856,0.952,9.6,reported_summary
+FIX-21v2,non_convex_adversarial,0.929,0.943,1.4,reported_summary
+FIX-22,non_convex_adversarial,0.9429,0.9682,2.53,reported_summary
+FIX-23,mixed_bayes_pressure,, , ,requires_raw_data

@@ -1,0 +1,1 @@
+{"id":"safe_rl_near_001","category":"safe_rl","stress":"near_infeasible","prompt":"安全约束非常紧，策略优化时稍微更新就可能越界。如何处理？","must":["classify safe_rl near_infeasible","mention staged injection","use FIX-18 bounds"],"must_not":["use large stage_step","ignore safety constraint"]}

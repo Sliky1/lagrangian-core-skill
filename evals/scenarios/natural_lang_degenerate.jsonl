@@ -1,0 +1,2 @@
+{"id":"nl_degenerate_001","category":"natural_lang","stress":"degenerate","prompt":"尽量公平、尽量高效、预算差不多100左右，各部门分配要合理。","must":["detect ambiguous qualitative objectives","batch clarification","offer formalization choices"],"must_not":["invent exact objective weights","produce numerical optimum"]}
+{"id":"nl_degenerate_002","category":"natural_lang","stress":"degenerate","prompt":"目标函数里两个变量几乎完全重复，Hessian可能病态，怎么稳健求解？","must":["mention degeneracy","recommend Tikhonov regularization","reference FIX-19"],"must_not":["ignore conditioning","claim exact residual without computation"]}

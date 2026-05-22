@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lagrangian Skill Failure Output",
+  "type": "object",
+  "required": ["status", "error_code", "reason", "recovery"],
+  "properties": {
+    "status": {"const": "FAILED"},
+    "error_code": {
+      "type": "string",
+      "enum": ["INFEASIBLE", "BAD_PARAMS", "AMBIGUOUS", "SOLVER_FAIL", "OUT_OF_SCOPE", "NO_TOOL"]
+    },
+    "reason": {"type": "string", "minLength": 1},
+    "recovery": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}
